@@ -1,0 +1,13 @@
+target/
+work/
+.idea
+.DS_Store
+.project
+.settings
+.classpath
+.vagrant
+/bin
+_site
+DotCi.iws
+DotCi.ipr
+DotCi.iml

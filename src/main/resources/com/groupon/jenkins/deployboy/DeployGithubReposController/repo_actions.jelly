@@ -1,0 +1,18 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+    <j:if test="${!j.projectPresent}">
+        <form action="${j.jenkinsRootUrl}/deployReposGithub/createProject"  name="addproject">
+            <input type="hidden" name="fullName" value="${j.fullName}" />
+            <input type="submit" value="Setup Deploy Job"/>
+        </form>
+
+    </j:if>
+   <p>
+    <form action="${j.jenkinsRootUrl}/deployReposGithub/requestDeploy"  name="requestDeploy">
+        <input type="hidden" name="fullName" value="${j.fullName}" />
+        <input type="submit" value="Request Deploy"/>
+    </form>
+    </p>
+
+
+</j:jelly>
