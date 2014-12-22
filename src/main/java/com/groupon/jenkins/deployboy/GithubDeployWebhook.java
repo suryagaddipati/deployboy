@@ -43,11 +43,12 @@ import java.util.logging.Logger;
 @Extension
 public class GithubDeployWebhook implements UnprotectedRootAction {
     private static final Logger LOGGER = Logger.getLogger(com.groupon.jenkins.github.GithubWebhook.class.getName());
+    public static final String URL = "githubDeployHook";
     private final SequentialExecutionQueue queue = new SequentialExecutionQueue(Executors.newSingleThreadExecutor());
 
     @Override
     public String getUrlName() {
-        return "githubDeployHook";
+        return URL;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -76,7 +77,7 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
                     queue.execute(new Runnable() {
                         @Override
                         public void run() {
-                            job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getBranch())));
+                            job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getRef())));
                         }
                     });
                 }

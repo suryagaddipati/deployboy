@@ -24,10 +24,10 @@ public class DeploymentEventPayload {
     }
 
     public Cause getCause() {
-        return new GithubDeployCause(getPusher());
+        return new GithubDeployCause(this);
     }
 
-    public String getBranch() {
+    public String getRef() {
         return payloadJson.getString("ref");
     }
 }

@@ -13,6 +13,7 @@ import com.groupon.jenkins.dynamic.organizationcontainer.OrganizationContainerRe
 import com.groupon.jenkins.github.GithubRepoProperty;
 import com.groupon.jenkins.github.services.GithubCurrentUserService;
 import hudson.Extension;
+import hudson.model.Label;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.model.TopLevelItem;
 import jenkins.model.Jenkins;
@@ -24,6 +25,7 @@ import org.kohsuke.stapler.StaplerResponse;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,21 +87,18 @@ public class DeployGithubReposController extends GithubReposController{
 
     public void doCreateProject(StaplerRequest request, StaplerResponse response) throws IOException {
         GHRepository githubRepo = getGithubRepository(request);
-        githubRepo.createWebHook(new java.net.URL("http://localhost:8080/jenkins/meow"), Arrays.asList(GHEvent.DEPLOYMENT,GHEvent.DEPLOYMENT_STATUS));
+        githubRepo.createWebHook(new URL(getDeployBoyConfiguration().getGithubCallbackUrl()), Arrays.asList(GHEvent.DEPLOYMENT,GHEvent.DEPLOYMENT_STATUS));
         DynamicProject project = createProject(githubRepo);
         response.sendRedirect2(redirectAfterCreateItem(request, project));
     }
 
-    public void doRequestDeploy(StaplerRequest request, StaplerResponse response) throws IOException {
-        String repoName = request.getParameter("fullName");
-
-        GitHub github = getGitHub(request);
-        GHRepository githubRepo = github.getRepository(repoName);
-        githubRepo.createDeployment().ref("master").description("Test Deployment Request").create();
+    private DeployBoyConfiguration getDeployBoyConfiguration() {
+        return DeployBoyConfiguration.get();
     }
+
     private DynamicProject createProject(GHRepository githubRepository) throws IOException {
         OrganizationContainer folder = new OrganizationContainerRepository().getOrCreateContainer(githubRepository.getOwner().getLogin());
-        String projectName = githubRepository.getName()+ "Deploys";
+        String projectName = githubRepository.getName()+ "-Deploys";
         DynamicProject project = folder.createProject(DynamicProject.class, projectName);
 
         project.setDescription(format("<a href=\"%s\">%s</a>", githubRepository.getUrl(), githubRepository.getUrl()));
@@ -109,7 +108,8 @@ public class DeployGithubReposController extends GithubReposController{
         }
         project.addProperty(new ParametersDefinitionProperty(new GithubBranchParameterDefinition("BRANCH", "master",githubRepository.getUrl())));
         project.addProperty(new GithubRepoProperty(githubRepository.getUrl()));
-        project.addProperty(new BuildTypeProperty(SetupConfig.get().getDefaultBuildType()));
+        project.setAssignedLabel(Label.get(getDeployBoyConfiguration().getLabel()));
+        project.addProperty(new BuildTypeProperty(DeployBoyBuildType.NAME));
         project.addProperty(new DynamicProjectBranchTabsProperty("master"));
         project.save();
         folder.addItem(project);
