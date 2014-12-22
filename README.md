@@ -14,7 +14,7 @@ deployboy
    Example:
    
    ```yaml
-   environment_image: docker-registry:80/deploy/deal_estate:latest
+environment_image: docker-registry:80/deploy/deal_estate:latest
 deployment: 
     ref: master
     task: bundle install ; bundle exec cap $deploy_env deploy
@@ -23,6 +23,7 @@ deployment:
     payload: "[]"
     environment: environment
     description: "deploy boy"
+
 notifications: 
   pending: 
     - hipchat: Rapt
