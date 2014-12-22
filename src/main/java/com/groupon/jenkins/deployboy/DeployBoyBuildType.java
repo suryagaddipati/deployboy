@@ -1,6 +1,7 @@
 package com.groupon.jenkins.deployboy;
 
 import com.groupon.jenkins.buildtype.InvalidBuildConfigurationException;
+import com.groupon.jenkins.buildtype.util.shell.ShellScriptRunner;
 import com.groupon.jenkins.dynamic.build.DynamicBuild;
 import com.groupon.jenkins.dynamic.build.execution.BuildExecutionContext;
 import com.groupon.jenkins.dynamic.buildtype.BuildType;
@@ -32,7 +33,7 @@ public class DeployBoyBuildType extends BuildType{
         Map<String,Object> buildEnvironment = build.getEnvironmentWithChangeSet(listener);
         Map config = new GroovyYamlTemplateProcessor(getDeployBoyYml(build), buildEnvironment).getConfig();
         DeployBoyBuildConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config);
-
+        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload));
         return Result.ABORTED ;
     }
 

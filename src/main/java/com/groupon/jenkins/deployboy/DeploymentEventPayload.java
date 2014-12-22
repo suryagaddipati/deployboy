@@ -22,6 +22,9 @@ public class DeploymentEventPayload {
     public String getProjectUrl() {
         return  payloadJson.getJSONObject("repository").getString("html_url");
     }
+    public String getCloneUrl() {
+        return  payloadJson.getJSONObject("repository").getString("clone_url");
+    }
 
     public Cause getCause() {
         return new GithubDeployCause(this);
