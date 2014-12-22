@@ -53,18 +53,25 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void doIndex(StaplerRequest req, StaplerResponse response) throws IOException {
+       String payload = getRequestPayload(req);
        if(req.getHeader("X-GitHub-Event").equals("deployment")){
-
-           String payload = getRequestPayload(req);
-           processGitHubPayload(payload);
+           startDeployment(payload);
        }
+
+        if(req.getHeader("X-GitHub-Event").equals("deployment_status")){
+            handleDeployStatusChange(payload);
+        }
+    }
+
+    private void handleDeployStatusChange(String payload) {
+
     }
 
     protected String getRequestPayload(StaplerRequest req) throws IOException {
         return req.getParameter("payload"); // CharStreams.toString(req.getReader());
     }
 
-    public void processGitHubPayload(String payloadData) {
+    public void startDeployment(String payloadData) {
         SecurityContextHolder.getContext().setAuthentication(ACL.SYSTEM);
         final DeploymentEventPayload payload = makePayload(payloadData);
         LOGGER.info("Received POST by " + payload.getPusher());
