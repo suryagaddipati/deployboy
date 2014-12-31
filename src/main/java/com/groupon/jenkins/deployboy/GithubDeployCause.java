@@ -3,8 +3,7 @@ package com.groupon.jenkins.deployboy;
 import com.google.common.collect.Lists;
 import com.groupon.jenkins.dynamic.build.cause.BuildCause;
 import com.groupon.jenkins.dynamic.build.cause.GithubLogEntry;
-import com.groupon.jenkins.github.GitBranch;
-import hudson.model.Cause;
+import com.groupon.jenkins.git.GitBranch;
 
 public class GithubDeployCause extends BuildCause{
 

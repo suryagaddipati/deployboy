@@ -23,13 +23,18 @@ THE SOFTWARE.
  */
 package com.groupon.jenkins.deployboy;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.groupon.jenkins.SetupConfig;
+import com.groupon.jenkins.dynamic.build.DynamicProject;
 import com.groupon.jenkins.dynamic.build.repository.DynamicProjectRepository;
+import com.groupon.jenkins.git.GitUrl;
 import com.groupon.jenkins.github.NoDuplicatesParameterAction;
 import hudson.Extension;
 import hudson.model.*;
 import hudson.security.ACL;
 import hudson.util.SequentialExecutionQueue;
+import jenkins.model.Jenkins;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -38,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Extension
@@ -77,29 +83,41 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
         LOGGER.info("Received POST by " + payload.getPusher());
         if (payload.needsBuild()) {
             LOGGER.info("Received kicking off build for " + payload.getProjectUrl());
-            for (final AbstractProject<?, ?> job : makeDynamicProjectRepo().getJobsFor(payload.getProjectUrl())) {
-                if(job.getName().endsWith("Deploy")){
+            for (final AbstractProject<?, ?> job : getJobsFor(payload.getProjectUrl())) {
 
-                    LOGGER.info("starting job" + job.getName());
+                    LOGGER.info("starting job " + job.getName());
                     queue.execute(new Runnable() {
                         @Override
                         public void run() {
-                            job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getRef())));
+                            try{
+
+                                job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getRef())));
+                            }catch (Exception e){
+                                 LOGGER.log(Level.ALL,"",e);
+                            }
                         }
                     });
-                }
-
             }
         }
     }
-    private List<ParameterValue> getParametersValues(Job job, String branch) {
+    public Iterable<DynamicProject> getJobsFor(final String url) {
+        return Iterables.filter(Jenkins.getInstance().getAllItems(DynamicProject.class), new Predicate<DynamicProject>() {
+            @Override
+            public boolean apply( DynamicProject input) {
+                GitUrl gitUrl = new GitUrl(url);
+                String[] orgRepo = gitUrl.getFullRepoName().split("/");
+                return  input.getParent().getName().equals(orgRepo[0]) && input.getName().equals(orgRepo[1] + "-Deploys");
+            }
+        });
+    }
+    private List<ParameterValue> getParametersValues(Job job, String ref) {
         ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty) job.getProperty(ParametersDefinitionProperty.class);
         ArrayList<ParameterValue> defValues = new ArrayList<ParameterValue>();
 
         for(ParameterDefinition paramDefinition : paramDefProp.getParameterDefinitions())
         {
-            if("BRANCH".equals(paramDefinition.getName())){
-                StringParameterValue branchParam = new StringParameterValue("BRANCH", branch);
+            if("REF".equals(paramDefinition.getName())){
+                StringParameterValue branchParam = new StringParameterValue("BRANCH", ref);
                defValues.add(branchParam);
             }else{
                 ParameterValue defaultValue  = paramDefinition.getDefaultParameterValue();

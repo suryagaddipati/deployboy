@@ -6,7 +6,6 @@ import com.groupon.jenkins.buildsetup.GithubReposController;
 import com.groupon.jenkins.buildsetup.ProjectConfigInfo;
 import com.groupon.jenkins.dynamic.build.DynamicProject;
 import com.groupon.jenkins.dynamic.build.DynamicProjectBranchTabsProperty;
-import com.groupon.jenkins.dynamic.build.GithubBranchParameterDefinition;
 import com.groupon.jenkins.dynamic.buildtype.BuildTypeProperty;
 import com.groupon.jenkins.dynamic.organizationcontainer.OrganizationContainer;
 import com.groupon.jenkins.dynamic.organizationcontainer.OrganizationContainerRepository;
@@ -15,10 +14,14 @@ import com.groupon.jenkins.github.services.GithubCurrentUserService;
 import hudson.Extension;
 import hudson.model.Label;
 import hudson.model.ParametersDefinitionProperty;
+import hudson.model.StringParameterDefinition;
 import hudson.model.TopLevelItem;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
-import org.kohsuke.github.*;
+import org.kohsuke.github.GHEvent;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHUser;
+import org.kohsuke.github.GitHub;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -106,10 +109,10 @@ public class DeployGithubReposController extends GithubReposController{
         if (StringUtils.isNotEmpty(SetupConfig.get().getLabel())) {
             project.setAssignedLabel(Jenkins.getInstance().getLabel(SetupConfig.get().getLabel()));
         }
-        project.addProperty(new ParametersDefinitionProperty(new GithubBranchParameterDefinition("BRANCH", "master",githubRepository.getUrl())));
+        project.addProperty(new ParametersDefinitionProperty(new StringParameterDefinition("REF","master")));
+        project.setAssignedLabel(Label.get(StringUtils.trimToNull(getDeployBoyConfiguration().getLabel())));
+        project.addProperty(new BuildTypeProperty(DeployBoyBuildType.class.getName()));
         project.addProperty(new GithubRepoProperty(githubRepository.getUrl()));
-        project.setAssignedLabel(Label.get(getDeployBoyConfiguration().getLabel()));
-        project.addProperty(new BuildTypeProperty(DeployBoyBuildType.NAME));
         project.addProperty(new DynamicProjectBranchTabsProperty("master"));
         project.save();
         folder.addItem(project);
@@ -151,7 +154,7 @@ public class DeployGithubReposController extends GithubReposController{
     @Override
     public Object getTarget() {
         StaplerRequest currentRequest = Stapler.getCurrentRequest();
-        //if(getAccessToken(currentRequest) == null) return new GithubOauthLoginAction();
+        if(getAccessToken(currentRequest) == null) return new DeployGithubOAuthLoginAction();
         return  this;
     }
 }

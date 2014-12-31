@@ -4,15 +4,23 @@ import hudson.model.Cause;
 import net.sf.json.JSONObject;
 
 public class DeploymentEventPayload {
+    private final String pusher;
+    private final String projectUrl;
+    private String cloneUrl;
+    private String ref;
 
-    private final JSONObject payloadJson;
+//    private final JSONObject payloadJson;
 
     public DeploymentEventPayload(String payloadData) {
-        this.payloadJson = JSONObject.fromObject(payloadData);
+        JSONObject payloadJson = JSONObject.fromObject(payloadData);
+         pusher = payloadJson.getJSONObject("deployment").getJSONObject("creator").getString("login");
+        projectUrl = payloadJson.getJSONObject("repository").getString("html_url");
+        cloneUrl =payloadJson.getJSONObject("repository").getString("clone_url");
+        ref =payloadJson.getJSONObject("deployment").getString("ref");
     }
 
     public String getPusher() {
-        return payloadJson.getJSONObject("deployment").getJSONObject("creator").getString("login");
+        return pusher;
     }
 
     public boolean needsBuild() {
@@ -20,10 +28,10 @@ public class DeploymentEventPayload {
     }
 
     public String getProjectUrl() {
-        return  payloadJson.getJSONObject("repository").getString("html_url");
+        return   projectUrl;
     }
     public String getCloneUrl() {
-        return  payloadJson.getJSONObject("repository").getString("clone_url");
+        return  cloneUrl;
     }
 
     public Cause getCause() {
@@ -31,6 +39,6 @@ public class DeploymentEventPayload {
     }
 
     public String getRef() {
-        return payloadJson.getString("ref");
+        return ref;
     }
 }

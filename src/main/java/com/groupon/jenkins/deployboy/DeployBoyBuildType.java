@@ -33,7 +33,7 @@ public class DeployBoyBuildType extends BuildType{
         Map<String,Object> buildEnvironment = build.getEnvironmentWithChangeSet(listener);
         Map config = new GroovyYamlTemplateProcessor(getDeployBoyYml(build), buildEnvironment).getConfig();
         DeployBoyBuildConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config);
-        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload));
+        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload.getCloneUrl(),payload.getRef()));
         return Result.ABORTED ;
     }
 
