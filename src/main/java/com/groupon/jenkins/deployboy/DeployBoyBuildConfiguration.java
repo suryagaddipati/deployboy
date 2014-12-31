@@ -1,6 +1,5 @@
 package com.groupon.jenkins.deployboy;
 
-import com.google.common.collect.Iterables;
 import com.groupon.jenkins.buildtype.dockerimage.DockerCommandBuilder;
 import com.groupon.jenkins.buildtype.util.shell.ShellCommands;
 import com.groupon.jenkins.git.GitUrl;

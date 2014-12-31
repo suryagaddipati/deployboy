@@ -8,6 +8,7 @@ public class DeploymentEventPayload {
     private final String projectUrl;
     private String cloneUrl;
     private String ref;
+    private int id;
 
 //    private final JSONObject payloadJson;
 
@@ -17,6 +18,7 @@ public class DeploymentEventPayload {
         projectUrl = payloadJson.getJSONObject("repository").getString("html_url");
         cloneUrl =payloadJson.getJSONObject("repository").getString("clone_url");
         ref =payloadJson.getJSONObject("deployment").getString("ref");
+        id = payloadJson.getJSONObject("deployment").getInt("id");
     }
 
     public String getPusher() {
@@ -40,5 +42,9 @@ public class DeploymentEventPayload {
 
     public String getRef() {
         return ref;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

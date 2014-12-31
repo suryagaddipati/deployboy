@@ -10,6 +10,8 @@ import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
+import org.kohsuke.github.GHDeploymentState;
+import org.kohsuke.github.GHDeploymentStatus;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,8 +34,9 @@ public class DeployBoyBuildType extends BuildType{
         DeploymentEventPayload payload = cause.getPayload();
         Map<String,Object> buildEnvironment = build.getEnvironmentWithChangeSet(listener);
         Map config = new GroovyYamlTemplateProcessor(getDeployBoyYml(build), buildEnvironment).getConfig();
+        GHDeploymentStatus deploymentStatus = build.getGithubRepository().createDeployStatus(payload.getId(), GHDeploymentState.PENDING).create();
         DeployBoyBuildConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config);
-        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload.getCloneUrl(),payload.getRef()));
+        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload.getCloneUrl(), payload.getRef()));
         return Result.ABORTED ;
     }
 
