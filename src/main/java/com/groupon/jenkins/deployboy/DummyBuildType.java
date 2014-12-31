@@ -22,6 +22,7 @@ public class DummyBuildType extends BuildType {
 
     @Override
     public Result runBuild(DynamicBuild dynamicBuild, BuildExecutionContext buildExecutionContext, Launcher launcher, BuildListener buildListener) throws IOException, InterruptedException {
+        dynamicBuild.setResult(Result.SUCCESS);
         new DeployRequestDotCiPlugin().perform(dynamicBuild,launcher,buildListener);
         return Result.SUCCESS;
     }

@@ -24,21 +24,23 @@ import static hudson.model.Result.UNSTABLE;
 @Extension
 public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
     public DeployRequestDotCiPlugin() {
-        super("deploy_request", "");
+        super("deploy_boy", "");
     }
 
     @Override
     public boolean perform(DynamicBuild build, Launcher launcher, BuildListener listener) {
-        build.setResult(Result.SUCCESS);
         try {
             Map<String,Object> buildEnvironment = build.getEnvironmentWithChangeSet(listener);
             Map config = new GroovyYamlTemplateProcessor(getDeployBoyYml(build), buildEnvironment).getConfig();
-            DeployBoyBuildConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config);
+            DeployBoyBuildConfiguration.GHDeploymentConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config).getGHDeploymentConfiguration();
             setCommitStatus(build);
-            GHDeployment deployment = build.getGithubRepository().createDeployment("master")
-                    .payload("{\"user\":\"atmos\",\"room_id\":123456}")
-                    .description("question")
+            GHDeployment deployment = build.getGithubRepository().createDeployment(deployBoyBuildConfiguration.getRef())
+                    .payload(deployBoyBuildConfiguration.getPayload())
+                    .description(deployBoyBuildConfiguration.getDescription())
+                    .environment(deployBoyBuildConfiguration.getEnvironment())
+                    .requiredContexts(deployBoyBuildConfiguration.getRequireContexts())
                     .create();
+            listener.getLogger().println("DeployBoy: Created deployment at " + deployment.getUrl());
             return true;
         } catch (Exception e) {
            throw new RuntimeException(e);

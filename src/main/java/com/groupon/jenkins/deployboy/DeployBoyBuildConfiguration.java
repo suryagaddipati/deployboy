@@ -1,5 +1,6 @@
 package com.groupon.jenkins.deployboy;
 
+import com.google.common.collect.Iterables;
 import com.groupon.jenkins.buildtype.dockerimage.DockerCommandBuilder;
 import com.groupon.jenkins.buildtype.util.shell.ShellCommands;
 import com.groupon.jenkins.git.GitUrl;
@@ -12,10 +13,12 @@ import static com.groupon.jenkins.buildtype.dockerimage.DockerCommandBuilder.doc
 import static java.lang.String.format;
 
 public class DeployBoyBuildConfiguration {
+    private final GHDeploymentConfiguration ghDeploymentConfiguration;
     private Map config;
 
     public DeployBoyBuildConfiguration(Map config) {
         this.config = config;
+        this.ghDeploymentConfiguration = new GHDeploymentConfiguration((Map<String, Object>) config.get("deployment"));
     }
 
     public ShellCommands getShellCommands(String cloneUrl, String ref) {
@@ -47,5 +50,47 @@ public class DeployBoyBuildConfiguration {
 
     private String getImageName() {
          return (String) config.get("environment_image");
+    }
+
+    public GHDeploymentConfiguration getGHDeploymentConfiguration() {
+        return this.ghDeploymentConfiguration;
+    }
+
+
+    public static class GHDeploymentConfiguration{
+        /*
+        ref: master
+task: bundle install ; bundle exec cap $deploy_env deploy
+auto_merge: false
+required_contexts: [DotCi]
+payload: "[]"
+environment: environment
+description: "deploy boy"
+         */
+
+        private Map<String, Object> deploymentConfig;
+
+        public GHDeploymentConfiguration(Map<String, Object> deploymentConfig) {
+            this.deploymentConfig = deploymentConfig;
+        }
+        public String getRef(){
+            return (String) this.deploymentConfig.get("ref");
+        }
+        public String getEnvironment(){
+            return (String) this.deploymentConfig.get("environment");
+        }
+        public String getDescription(){
+            return (String) this.deploymentConfig.get("description");
+        }
+
+        public List<String> getRequireContexts(){
+            return (List<String>) this.deploymentConfig.get("required_contexts");
+        }
+        public String getPayload(){
+            return (String) this.deploymentConfig.get("payload");
+        }
+        public Boolean isAutoMerge(){
+           return (Boolean) this.deploymentConfig.get("auto_merge");
+        }
     }
 }
