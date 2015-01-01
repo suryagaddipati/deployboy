@@ -27,12 +27,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.groupon.jenkins.DotCiModule;
-import com.groupon.jenkins.buildtype.install_packages.InstallPackagesBuild;
-import com.groupon.jenkins.dynamic.build.repository.DynamicBuildRepository;
+import com.groupon.jenkins.SetupConfig;
 import com.groupon.jenkins.dynamic.build.repository.DynamicProjectRepository;
-import com.groupon.jenkins.dynamic.buildtype.BuildType;
-import com.groupon.jenkins.github.services.GithubAccessTokenRepository;
-import com.groupon.jenkins.github.services.GithubDeployKeyRepository;
 import hudson.Extension;
 import jenkins.model.GlobalConfiguration;
 import jenkins.model.Jenkins;
@@ -84,28 +80,19 @@ public class DeployBoyConfiguration extends GlobalConfiguration {
 
 
     public String getGithubClientID() {
-        return githubClientID;
+        return SetupConfig.get().getGithubClientID();
     }
 
-    public void setGithubClientID(String githubClientID) {
-        this.githubClientID = githubClientID;
-    }
 
     public String getGithubClientSecret() {
-        return githubClientSecret;
+        return SetupConfig.get().getGithubClientSecret();
     }
 
-    public void setGithubClientSecret(String githubClientSecret) {
-        this.githubClientSecret = githubClientSecret;
-    }
 
     public DynamicProjectRepository getDynamicProjectRepository() {
         return getInjector().getInstance(DynamicProjectRepository.class);
     }
 
-    public GithubDeployAccessTokenRepository getDeployAccessTokenRepository() {
-        return getInjector().getInstance(GithubDeployAccessTokenRepository.class);
-    }
 
     private transient Object injectorLock = new Object();
 

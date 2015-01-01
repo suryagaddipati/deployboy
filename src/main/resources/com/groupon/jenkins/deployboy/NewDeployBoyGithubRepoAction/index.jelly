@@ -1,9 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-        <form action="${j.jenkinsRootUrl}/deployReposGithub/createProject"  name="addproject">
-            <input type="hidden" name="fullName" value="${j.fullName}" />
+        <form action="${it.name}/createProject">
+            <input type="hidden" name="fullName" value="${p.fullName}" />
             <input type="submit" value="Setup Deploy Job"/>
         </form>
-
-
 </j:jelly>

@@ -295,6 +295,17 @@
         <root url="file://$PROJECT_DIR$/../DotCi/target/inject-tests" />
       </SOURCES>
     </library>
+    <library name="Maven: com.groupon.jenkins-ci.plugins:DotCi:2.5.4-SNAPSHOT">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/groupon/jenkins-ci/plugins/DotCi/2.5.4-SNAPSHOT/DotCi-2.5.4-SNAPSHOT.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/groupon/jenkins-ci/plugins/DotCi/2.5.4-SNAPSHOT/DotCi-2.5.4-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/groupon/jenkins-ci/plugins/DotCi/2.5.4-SNAPSHOT/DotCi-2.5.4-SNAPSHOT-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: com.infradna.tool:bridge-method-annotation:1.12">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/infradna/tool/bridge-method-annotation/1.12/bridge-method-annotation-1.12.jar!/" />

@@ -27,12 +27,6 @@ THE SOFTWARE.
              <f:entry title="Assigned label for newly created jobs (leave it empty if there is no label restriction)">
                 <f:textbox name="deployboy.label" value="${instance.label}"/>
             </f:entry>
-           <f:entry title="Github Client ID">
-             <f:textbox name="deployboy.githubClientID" value="${instance.githubClientID}"/>
-           </f:entry>
-           <f:entry title="Github Client Secret">
-             <f:textbox name="deployboy.githubClientSecret" value="${instance.githubClientSecret}"/>
-           </f:entry>
             <f:entry title="Github callback url">
                <f:textbox name="deployboy.githubCallbackUrl" value="${instance.githubCallbackUrl}"/>
             </f:entry>
