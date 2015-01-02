@@ -115,7 +115,7 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
         for(ParameterDefinition paramDefinition : paramDefProp.getParameterDefinitions())
         {
             if("REF".equals(paramDefinition.getName())){
-                StringParameterValue branchParam = new StringParameterValue("BRANCH", ref);
+                StringParameterValue branchParam = new StringParameterValue("REF", ref);
                defValues.add(branchParam);
             }else{
                 ParameterValue defaultValue  = paramDefinition.getDefaultParameterValue();
