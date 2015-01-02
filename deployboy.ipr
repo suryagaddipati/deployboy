@@ -2352,6 +2352,17 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: org.mockito:mockito-all:1.9.5">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: org.mongodb.morphia:morphia:0.107">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/morphia/morphia/0.107/morphia-0.107.jar!/" />

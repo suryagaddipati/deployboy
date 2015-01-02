@@ -57,15 +57,6 @@ public class DeployBoyBuildConfiguration {
 
 
     public static class GHDeploymentConfiguration{
-        /*
-        ref: master
-task: bundle install ; bundle exec cap $deploy_env deploy
-auto_merge: false
-required_contexts: [DotCi]
-payload: "[]"
-environment: environment
-description: "deploy boy"
-         */
 
         private Map<String, Object> deploymentConfig;
 

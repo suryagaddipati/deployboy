@@ -10,7 +10,6 @@ public class DeploymentEventPayload {
     private String ref;
     private int id;
 
-//    private final JSONObject payloadJson;
 
     public DeploymentEventPayload(String payloadData) {
         JSONObject payloadJson = JSONObject.fromObject(payloadData);

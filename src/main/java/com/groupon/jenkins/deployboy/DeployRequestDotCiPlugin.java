@@ -8,7 +8,8 @@ import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
-import hudson.model.Run;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHDeployment;
 import org.kohsuke.github.GHRepository;
@@ -16,7 +17,6 @@ import org.kohsuke.github.GHRepository;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
 
 import static hudson.model.Result.SUCCESS;
 import static hudson.model.Result.UNSTABLE;
@@ -35,7 +35,8 @@ public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
             DeployBoyBuildConfiguration.GHDeploymentConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config).getGHDeploymentConfiguration();
             setCommitStatus(build);
             GHDeployment deployment = build.getGithubRepository().createDeployment(deployBoyBuildConfiguration.getRef())
-                    .payload(deployBoyBuildConfiguration.getPayload())
+                    .autoMerge(deployBoyBuildConfiguration.isAutoMerge())
+                    .payload(getPayload(build,deployBoyBuildConfiguration.getPayload()))
                     .description(deployBoyBuildConfiguration.getDescription())
                     .environment(deployBoyBuildConfiguration.getEnvironment())
                     .requiredContexts(deployBoyBuildConfiguration.getRequireContexts())
@@ -47,6 +48,13 @@ public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
         }finally {
            setCommitStatusBackToPending(build);
         }
+    }
+
+    protected String getPayload(DynamicBuild build, String payloadInput) {
+        String  payload = StringUtils.trimToNull(payloadInput) == null ? "{}": payloadInput;
+        JSONObject payloadJson = JSONObject.fromObject(payload);
+        payloadJson.put("requested_by",build.getCause().getPusher());
+        return payloadJson.toString();
     }
 
     private void setCommitStatusBackToPending(DynamicBuild build) {
