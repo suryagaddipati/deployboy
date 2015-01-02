@@ -17,8 +17,8 @@ public class GithubDeployCause extends BuildCause{
         this.payload = payload;
     }
     @Override
-    public String getShortDescription() {
-        return "Deployment requested by: " + payload.getPusher();
+    public String getBuildDescription() {
+        return "By: "+ payload.getPusher() + "\n At: <a href=\" " + payload.getDotCiUrl() + "\"> DotCi Build </a>";
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GithubDeployCause extends BuildCause{
     }
 
     @Override
-    public String getBuildDescription() {
+    public String getShortDescription() {
         return "Deployment requested by: " + payload.getPusher();
     }
 

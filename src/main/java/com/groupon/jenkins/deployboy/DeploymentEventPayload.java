@@ -6,6 +6,7 @@ import net.sf.json.JSONObject;
 public class DeploymentEventPayload {
     private final String pusher;
     private final String projectUrl;
+    private final String dotCiUrl;
     private String cloneUrl;
     private String ref;
     private int id;
@@ -13,11 +14,14 @@ public class DeploymentEventPayload {
 
     public DeploymentEventPayload(String payloadData) {
         JSONObject payloadJson = JSONObject.fromObject(payloadData);
-         pusher = payloadJson.getJSONObject("deployment").getJSONObject("creator").getString("login");
+        JSONObject deployment = payloadJson.getJSONObject("deployment");
+        JSONObject dotCiInfo = JSONObject.fromObject(deployment.getString("payload")).getJSONObject("DotCi");
+        pusher = dotCiInfo.getString("pusher");
+        dotCiUrl = dotCiInfo.getString("url");
         projectUrl = payloadJson.getJSONObject("repository").getString("html_url");
         cloneUrl =payloadJson.getJSONObject("repository").getString("clone_url");
-        ref =payloadJson.getJSONObject("deployment").getString("ref");
-        id = payloadJson.getJSONObject("deployment").getInt("id");
+        ref = deployment.getString("ref");
+        id = deployment.getInt("id");
     }
 
     public String getPusher() {
@@ -45,5 +49,9 @@ public class DeploymentEventPayload {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getDotCiUrl() {
+        return dotCiUrl;
     }
 }

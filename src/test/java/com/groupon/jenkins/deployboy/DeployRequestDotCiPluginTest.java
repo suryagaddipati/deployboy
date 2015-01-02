@@ -19,23 +19,37 @@ public class DeployRequestDotCiPluginTest {
         BuildCause buildCause = Mockito.mock(BuildCause.class);
         Mockito.when(build.getCause()).thenReturn(buildCause);
         Mockito.when(buildCause.getPusher()).thenReturn("sherman");
+        Mockito.when(build.getFullUrl()).thenReturn("http://build.url");
     }
 
     @Test
     public void should_add_pusher_to_payload(){
         String payload = new DeployRequestDotCiPlugin().getPayload(build, "{}");
         JSONObject payloadJson = JSONObject.fromObject(payload);
-        Assert.assertTrue(payloadJson.containsKey("requested_by"));
-        Assert.assertEquals("sherman",payloadJson.getString("requested_by"));
+        Assert.assertTrue(payloadJson.containsKey("DotCi"));
+        JSONObject dotCiInfo = payloadJson.getJSONObject("DotCi");
+        Assert.assertEquals("sherman", dotCiInfo.getString("pusher"));
 
     }
     @Test
     public void should_add_pusher_to_payload_if_payload_is_null(){
         String payload = new DeployRequestDotCiPlugin().getPayload(build,null);
         JSONObject payloadJson = JSONObject.fromObject(payload);
-        Assert.assertTrue(payloadJson.containsKey("requested_by"));
-        Assert.assertEquals("sherman",payloadJson.getString("requested_by"));
 
+        Assert.assertTrue(payloadJson.containsKey("DotCi"));
+        JSONObject dotCiInfo = payloadJson.getJSONObject("DotCi");
+        Assert.assertEquals("sherman", dotCiInfo.getString("pusher"));
+
+    }
+    @Test
+    public void should_add_build_url() {
+        String payload = new DeployRequestDotCiPlugin().getPayload(build, null);
+        JSONObject payloadJson = JSONObject.fromObject(payload);
+
+
+        Assert.assertTrue(payloadJson.containsKey("DotCi"));
+        JSONObject dotCiInfo = payloadJson.getJSONObject("DotCi");
+        Assert.assertEquals(build.getFullUrl(), dotCiInfo.getString("url"));
     }
 
 }

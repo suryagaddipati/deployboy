@@ -16,6 +16,7 @@ import org.kohsuke.github.GHRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static hudson.model.Result.SUCCESS;
@@ -53,7 +54,10 @@ public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
     protected String getPayload(DynamicBuild build, String payloadInput) {
         String  payload = StringUtils.trimToNull(payloadInput) == null ? "{}": payloadInput;
         JSONObject payloadJson = JSONObject.fromObject(payload);
-        payloadJson.put("requested_by",build.getCause().getPusher());
+        Map<String,String> dotCiInfo =  new HashMap<String, String>();
+        dotCiInfo.put("pusher",build.getCause().getPusher());
+        dotCiInfo.put("url",build.getFullUrl());
+        payloadJson.put("DotCi",dotCiInfo);
         return payloadJson.toString();
     }
 
