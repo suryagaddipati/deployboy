@@ -25,9 +25,7 @@ package com.groupon.jenkins.deployboy;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.groupon.jenkins.SetupConfig;
 import com.groupon.jenkins.dynamic.build.DynamicProject;
-import com.groupon.jenkins.dynamic.build.repository.DynamicProjectRepository;
 import com.groupon.jenkins.git.GitUrl;
 import com.groupon.jenkins.github.NoDuplicatesParameterAction;
 import hudson.Extension;
@@ -127,9 +125,6 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
         }
 
         return defValues;
-    }
-    protected DynamicProjectRepository makeDynamicProjectRepo() {
-        return SetupConfig.get().getDynamicProjectRepository();
     }
 
     protected DeploymentEventPayload makePayload(String payloadData) {

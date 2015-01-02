@@ -95,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JSONSerializer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/kohsuke/stapler/json-lib/2.4-jenkins-2/json-lib-2.4-jenkins-2-sources.jar!/net/sf/json/JSONSerializer.java">
+      <file leaf-file-name="GithubDeployWebhook.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployWebhook.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2010">
-              <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.8313953" vertical-offset="485" max-vertical-offset="1425">
+              <caret line="129" column="32" selection-start-line="129" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -129,11 +129,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GithubDeployCause.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GithubDeployCause.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployCause.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63076925" vertical-offset="0" max-vertical-offset="975">
-              <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
+              <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#482#483#0" expanded="true" />
@@ -149,7 +149,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/DeploymentEventPayload.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding>
                 <element signature="e#1004#1005#0" expanded="true" />
                 <element signature="e#1033#1034#0" expanded="true" />
@@ -192,7 +192,6 @@
         <option value="$PROJECT_DIR$/src/main/java/org/kohsuke/github/GithubRequester.java" />
         <option value="$PROJECT_DIR$/src/main/resources/com/groupon/jenkins/deployboy/DeployGithubReposController/repo_actions.jelly" />
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubRepoDeployProperty.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployWebhook.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/DeployBoyBuildType.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/DeployBoyConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/resources/com/groupon/jenkins/deployboy/DeployBoyConfiguration/config.jelly" />
@@ -211,6 +210,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/NewDeployBoyGithubRepoAction.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/DeploymentEventPayload.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployCause.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployWebhook.java" />
       </list>
     </option>
   </component>
@@ -634,8 +634,8 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32778198" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24072672" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32778198" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24072672" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -765,15 +765,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1260">
           <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-          <folding>
-            <element signature="e#2419#2465#0" expanded="true" />
-            <element signature="e#3673#4141#0" expanded="true" />
-            <element signature="e#4118#4119#0" expanded="true" />
-            <element signature="e#4330#4711#0" expanded="true" />
-            <element signature="e#4700#4701#0" expanded="true" />
-            <element signature="e#5767#5768#0" expanded="true" />
-            <element signature="e#5829#5830#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1070,22 +1062,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployWebhook.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="545" max-vertical-offset="1590">
-          <caret line="135" column="39" selection-start-line="135" selection-start-column="39" selection-end-line="135" selection-end-column="39" />
-          <folding>
-            <element signature="e#2419#2465#0" expanded="true" />
-            <element signature="e#3673#4141#0" expanded="true" />
-            <element signature="e#4118#4119#0" expanded="true" />
-            <element signature="e#4330#4711#0" expanded="true" />
-            <element signature="e#4700#4701#0" expanded="true" />
-            <element signature="e#5767#5768#0" expanded="true" />
-            <element signature="e#5829#5830#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/kohsuke/stapler/json-lib/2.4-jenkins-2/json-lib-2.4-jenkins-2-sources.jar!/net/sf/json/JSONSerializer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2010">
@@ -1176,10 +1152,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployCause.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
+          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#482#483#0" expanded="true" />
+            <element signature="e#520#521#0" expanded="true" />
+            <element signature="e#957#958#0" expanded="true" />
+            <element signature="e#999#1000#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/DeploymentEventPayload.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
           <folding>
             <element signature="e#1004#1005#0" expanded="true" />
             <element signature="e#1033#1034#0" expanded="true" />
@@ -1197,17 +1187,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployCause.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/groupon/jenkins/deployboy/GithubDeployWebhook.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63076925" vertical-offset="0" max-vertical-offset="975">
-          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#482#483#0" expanded="true" />
-            <element signature="e#520#521#0" expanded="true" />
-            <element signature="e#957#958#0" expanded="true" />
-            <element signature="e#999#1000#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.8313953" vertical-offset="485" max-vertical-offset="1425">
+          <caret line="129" column="32" selection-start-line="129" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
+          <folding />
         </state>
       </provider>
     </entry>
