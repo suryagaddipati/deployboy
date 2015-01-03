@@ -88,8 +88,7 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
                         @Override
                         public void run() {
                             try{
-
-                                job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getRef())));
+                                job.scheduleBuild(0, payload.getCause(), new NoDuplicatesParameterAction(getParametersValues(job, payload.getRef(),payload.getEnvironment())));
                             }catch (Exception e){
                                  LOGGER.log(Level.ALL,"",e);
                             }
@@ -108,7 +107,7 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
             }
         });
     }
-    private List<ParameterValue> getParametersValues(Job job, String ref) {
+    private List<ParameterValue> getParametersValues(Job job, String ref, String environment) {
         ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty) job.getProperty(ParametersDefinitionProperty.class);
         ArrayList<ParameterValue> defValues = new ArrayList<ParameterValue>();
 
@@ -123,6 +122,7 @@ public class GithubDeployWebhook implements UnprotectedRootAction {
                     defValues.add(defaultValue);
             }
         }
+        defValues.add(new StringParameterValue("BRANCH",environment));
 
         return defValues;
     }
