@@ -18,6 +18,7 @@ public class GithubDeployCause extends BuildCause{
 
     private List<GithubLogEntry> changeLog = Lists.newArrayList();
     private GitBranch branch;
+    private String diffUrl;
 
     public DeploymentEventPayload getPayload() {
         return payload;
@@ -38,6 +39,7 @@ public class GithubDeployCause extends BuildCause{
             GHDeployment prevDeployment = Iterables.get(deployments, 1);
             try {
                 GHCompare diff = repository.getCompare(prevDeployment.getSha(),payload.getSha());
+                this.diffUrl = diff.getHtmlUrl().toString();
                 changeLog = toChangeLog(diff);
             } catch (IOException e) {
                 throw  new RuntimeException(e);
@@ -71,7 +73,12 @@ public class GithubDeployCause extends BuildCause{
 
     @Override
     public String getBuildDescription() {
-        return "By: "+ payload.getPusher() + "\n At: <a href=\" " + payload.getDotCiUrl() + "\"> DotCi Build </a>";
+      if(diffUrl == null)  {
+          return String.format("<b>%s</b>  <br> %s", payload.getEnvironment(), payload.getPusher());
+      }
+       return String.format("<b>%s</b> (<a href=\"%s\">%s...</a>) " +
+               "<br> <img height=\"24\"  width=\"24\" src=\"%s\" tooltip=\"%s\">" +
+               "<br>", payload.getEnvironment(),diffUrl, "Commits", payload.getPusherAvatarUrl(), payload.getPusher());
     }
 
     @Override
@@ -81,7 +88,7 @@ public class GithubDeployCause extends BuildCause{
 
     @Override
     public String getShortDescription() {
-        return "Deployment requested by: " + payload.getPusher();
+        return String.format("Deployment requested by: <b>%s</b>  <br> From: %s", payload.getPusher(), payload.getDotCiUrl());
     }
 
     @Override

@@ -51,14 +51,19 @@ public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
         }
     }
 
-    protected String getPayload(DynamicBuild build, String payloadInput) {
+    protected String getPayload(DynamicBuild build, String payloadInput) throws IOException {
         String  payload = StringUtils.trimToNull(payloadInput) == null ? "{}": payloadInput;
         JSONObject payloadJson = JSONObject.fromObject(payload);
         Map<String,String> dotCiInfo =  new HashMap<String, String>();
         dotCiInfo.put("pusher",build.getCause().getPusher());
-        dotCiInfo.put("url",build.getFullUrl());
-        payloadJson.put("DotCi",dotCiInfo);
+        dotCiInfo.put("pusher_avatar_url", getPusherAvatarUrl(build));
+        dotCiInfo.put("url", build.getFullUrl());
+        payloadJson.put("DotCi", dotCiInfo);
         return payloadJson.toString();
+    }
+
+    private String getPusherAvatarUrl(DynamicBuild build) throws IOException {
+        return build.getGithubRepositoryService().getGithub().getUser(build.getCause().getPusher()).getAvatarUrl();
     }
 
     private void setCommitStatusBackToPending(DynamicBuild build) {

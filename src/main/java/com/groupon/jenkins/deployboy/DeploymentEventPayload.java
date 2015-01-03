@@ -9,6 +9,7 @@ public class DeploymentEventPayload {
     private final String dotCiUrl;
     private final String environment;
     private final String sha;
+    private final String pusherAvatarUrl;
     private String cloneUrl;
     private String ref;
     private int id;
@@ -19,6 +20,7 @@ public class DeploymentEventPayload {
         JSONObject deployment = payloadJson.getJSONObject("deployment");
         JSONObject dotCiInfo = JSONObject.fromObject(deployment.getString("payload")).getJSONObject("DotCi");
         pusher = dotCiInfo.getString("pusher");
+        pusherAvatarUrl = dotCiInfo.getString("pusher_avatar_url");
         dotCiUrl = dotCiInfo.getString("url");
         projectUrl = payloadJson.getJSONObject("repository").getString("html_url");
         cloneUrl =payloadJson.getJSONObject("repository").getString("clone_url");
@@ -65,5 +67,9 @@ public class DeploymentEventPayload {
 
     public String getSha() {
       return sha;
+    }
+
+    public String getPusherAvatarUrl() {
+        return pusherAvatarUrl;
     }
 }
