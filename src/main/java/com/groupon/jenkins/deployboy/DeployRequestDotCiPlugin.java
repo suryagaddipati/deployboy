@@ -79,7 +79,7 @@ public class DeployRequestDotCiPlugin extends DotCiPluginAdapter {
             }
             repository.createCommitStatus(build.getSha(), GHCommitState.PENDING, url, "Build in progress", "DotCi");
         } catch (IOException e) {
-            // Ignore if cannot create a pending status
+            // Ignore if cannot createNotifier a pending status
         }
     }
 

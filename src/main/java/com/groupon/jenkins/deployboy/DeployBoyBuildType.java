@@ -2,6 +2,7 @@ package com.groupon.jenkins.deployboy;
 
 import com.groupon.jenkins.buildtype.InvalidBuildConfigurationException;
 import com.groupon.jenkins.buildtype.util.shell.ShellScriptRunner;
+import com.groupon.jenkins.deployboy.notifications.DeployNotifier;
 import com.groupon.jenkins.dynamic.build.DynamicBuild;
 import com.groupon.jenkins.dynamic.build.execution.BuildExecutionContext;
 import com.groupon.jenkins.dynamic.buildtype.BuildType;
@@ -34,10 +35,27 @@ public class DeployBoyBuildType extends BuildType{
         DeploymentEventPayload payload = cause.getPayload();
         Map<String,Object> buildEnvironment = build.getEnvironmentWithChangeSet(listener);
         Map config = new GroovyYamlTemplateProcessor(getDeployBoyYml(build), buildEnvironment).getConfig();
-        GHDeploymentStatus deploymentStatus = build.getGithubRepository().createDeployStatus(payload.getId(), GHDeploymentState.PENDING).create();
         DeployBoyBuildConfiguration deployBoyBuildConfiguration = new DeployBoyBuildConfiguration( config);
-        new ShellScriptRunner(buildExecutionContext,listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload.getCloneUrl(), payload.getRef()));
-        return Result.ABORTED ;
+
+        GHDeploymentStatus deploymentStatus = build.getGithubRepository().createDeployStatus(payload.getId(), GHDeploymentState.PENDING).create();
+        runNotifiers(deploymentStatus,build,listener,deployBoyBuildConfiguration,deployBoyBuildConfiguration.getPendingNotifications());
+
+        Result result = new ShellScriptRunner(buildExecutionContext, listener).runScript(deployBoyBuildConfiguration.getShellCommands(payload.getCloneUrl(), payload.getRef()));
+        if(Result.SUCCESS.equals(result)){
+            deploymentStatus = build.getGithubRepository().createDeployStatus(payload.getId(), GHDeploymentState.SUCCESS).create();
+            runNotifiers(deploymentStatus,build,listener,deployBoyBuildConfiguration,deployBoyBuildConfiguration.getSuccessNotifications());
+        }else{
+            deploymentStatus = build.getGithubRepository().createDeployStatus(payload.getId(), GHDeploymentState.FAILURE).create();
+            runNotifiers(deploymentStatus,build,listener,deployBoyBuildConfiguration,deployBoyBuildConfiguration.getFailureNotifications());
+        }
+        return result;
+    }
+
+    private void runNotifiers(GHDeploymentStatus deploymentStatus, DynamicBuild build, BuildListener listener, DeployBoyBuildConfiguration deployBoyBuildConfiguration, Iterable<DeployNotifier> deployNotifiers) {
+         for(DeployNotifier deployNotifier : deployNotifiers){
+            deployNotifier.notify(deploymentStatus,build,listener) ;
+         }
+
     }
 
     private String getDeployBoyYml(DynamicBuild build) throws IOException {

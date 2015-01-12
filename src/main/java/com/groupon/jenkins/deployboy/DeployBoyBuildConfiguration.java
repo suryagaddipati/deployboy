@@ -1,12 +1,14 @@
 package com.groupon.jenkins.deployboy;
 
+import com.google.common.collect.Iterables;
+import com.groupon.jenkins.buildtype.InvalidBuildConfigurationException;
 import com.groupon.jenkins.buildtype.dockerimage.DockerCommandBuilder;
 import com.groupon.jenkins.buildtype.util.shell.ShellCommands;
+import com.groupon.jenkins.deployboy.notifications.DeployNotifier;
 import com.groupon.jenkins.git.GitUrl;
+import jenkins.model.Jenkins;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.groupon.jenkins.buildtype.dockerimage.DockerCommandBuilder.dockerCommand;
 import static java.lang.String.format;
@@ -53,6 +55,56 @@ public class DeployBoyBuildConfiguration {
 
     public GHDeploymentConfiguration getGHDeploymentConfiguration() {
         return this.ghDeploymentConfiguration;
+    }
+
+    public Iterable<DeployNotifier> getPendingNotifications() {
+        return getDeployNotifiers((List<?>) getNotifications().get("pending"));
+    }
+
+    private Iterable<DeployNotifier> getDeployNotifiers(List<?> pendingNotifications) {
+        List<DeployNotifier> deployNotifiers = new ArrayList<DeployNotifier>();
+        for(Object pendingNotification: pendingNotifications){
+            String notificationName;
+            Object options;
+            if (pendingNotification instanceof String) {
+                notificationName = (String) pendingNotification;
+                options = new HashMap<Object, Object>();
+            } else { // has to be a Map
+                Map<String, Object> notificationSpecMap = (Map<String, Object>) pendingNotification;
+                notificationName = Iterables.getOnlyElement(notificationSpecMap.keySet());
+                options = notificationSpecMap.get(notificationName);
+            }
+            deployNotifiers.add(createNotifier(notificationName, options));
+        }
+        return  deployNotifiers;
+    }
+
+    public   DeployNotifier createNotifier(String notificationName, Object options) {
+        for (DeployNotifier notifier : Jenkins.getInstance().getExtensionList (DeployNotifier.class)) {
+            if (notifier.getName().equals(notificationName)) {
+                try {
+                    notifier =  notifier.getClass().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                notifier.setOptions(options);
+                return notifier;
+            }
+
+        }
+        throw new InvalidBuildConfigurationException("Notification " + notificationName + " not supported");
+    }
+
+    private Map getNotifications() {
+        return (Map)  config.get("notifications");
+    }
+
+    public Iterable<DeployNotifier> getSuccessNotifications() {
+        return getDeployNotifiers((List<?>) getNotifications().get("success"));
+    }
+
+    public Iterable<DeployNotifier> getFailureNotifications() {
+        return getDeployNotifiers((List<?>) getNotifications().get("failure"));
     }
 
 

@@ -45,7 +45,7 @@ public class NewDeployBoyGithubRepoAction extends GithubRepoAction{
     private DynamicProject createProject(GHRepository githubRepository) throws IOException {
         OrganizationContainer folder = new OrganizationContainerRepository().getOrCreateContainer(githubRepository.getOwner().getLogin());
         String projectName = githubRepository.getName()+ "-Deploys";
-        DynamicProject project = folder.createProject(DynamicProject.class, projectName);
+        DeployBoyJob project = folder.createProject(DeployBoyJob.class, projectName);
 
         project.setDescription(format("<a href=\"%s\">%s</a>", githubRepository.getUrl(), githubRepository.getUrl()));
         project.setConcurrentBuild(true);
